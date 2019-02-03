@@ -1,7 +1,7 @@
 pragma solidity 0.4.24;
 
 contract SimpleCounter {
-    int counter; // state variabl
+    int counter; // state variable
 
     event counterUpdated(int newCounterValue);
 
@@ -9,7 +9,7 @@ contract SimpleCounter {
         counter = 0;
     }
 
-    function getCounter() view public returns(int) {
+    function getCounter() public view returns(int) {
         return counter;
     }
 
