@@ -32,7 +32,6 @@ contract Election {
     function addCandidate(string _name) public {
         candidates.push(Candidate(_name, 0));
         candidateCount += 1; 
-        // commen
     }
 
     function registerVoter() public {

@@ -18,7 +18,7 @@
         <p id='last-transaction-status'></p>
         <p id='timerpop'>0</p> 
         <p id='asyncpop'>0</p> 
-        <p id='xyz'>0</p> 
+        <p id='refreshtype'></p> 
     </div>
 
     <link rel="stylesheet" type="text/css" href="/style/main.css">
@@ -113,17 +113,18 @@
             })
         }
 
-        function isMobile() {
-            return (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ); 
+        function isMobileDevice() {
+            // case insensitive for regex
+            return (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)); 
         }
 
-        function mobileDeviceRefreshValue() {
-//    if (!isWaitingForConsensus) {
-//                var curr = parseInt($('#timerpop').html());
-//                $('#timerpop').html(curr + 1);
-//                getValue();
-//            }
+        function isCipherBrowser() {
+            // case insensitive for regex
+//            return (/Cipher/i.test(navigator.userAgent)); 
+              return(false)
+        }
 
+        function timerPop() {
             var status = $('#status').html();
             if (status !== "waiting for consensus") {
                 var curr = parseInt($('#timerpop').html());
@@ -136,26 +137,27 @@
 // main()
         var contract;
         var events;
-        var isWaitingForConsensus = false;
-        var timerPops = 0;
+
 
         $(document).ready(function() {
             initContract();
             getValue();
 
-            isMobileDevice = isMobile();
-            isMobileDevice = false;
+            if (isCipherBrowser()) {
+                $('#refreshtype').html("timer");
+            } else {
+                $('#refreshtype').html("async");
+            }
 
-            if (isMobileDevice) {
-                // Mobile device cant do async so just update value in place on interval 
+            if (isCipherBrowser()) {
+                // Cipher browser cant do async so just update value in place on interval 
                 // Initialzie the Promise then move on
-                setInterval(function(){ mobileDeviceRefreshValue(); }, 5000);
+                setInterval(function(){ timerPop(); }, 5000);
             } else {
                 contract.events.counterUpdated((error, event) => { 
                     var curr = parseInt($('#asyncpop').html());
                     $('#asyncpop').html(curr + 1);
-//                    $('#counter-value').html(event.returnValues.newCounterValue);
-                    $('#xyz').html("hiyall1");
+                    $('#counter-value').html(event.returnValues.newCounterValue);
                 })
             }
 
@@ -168,7 +170,7 @@
                 var acct = accounts[0];
                 return contract.methods.increment().send({from: acct});
             }).then(function(tx) {
-                if (isMobileDevice) { getValue() }  // Mobile device cant do async so just update value in place  
+                if (isCipherBrowser()) { getValue() }  // Cipher browser cant do async  
                 $('#status').html("idle");
                 $('#last-transaction-status').html("last transaction was successful");
             }).catch(function(err) {
@@ -185,7 +187,7 @@
                 var acct = accounts[0];
                 return contract.methods.decrement().send({from: acct});
             }).then(function(tx) {
-                if (isMobileDevice) { getValue() }  // Mobile device cant do async so just update value in place  
+                if (isCipherBrowser()) { getValue() }  // Cipher browser cant do async  
                 $('#status').html("idle");
                 $('#last-transaction-status').html("last transaction was successful");
             }).catch(function(err) {
@@ -202,7 +204,7 @@
                 var acct = accounts[0];
                 return contract.methods.reset().send({from: acct});
             }).then(function(tx) {
-                if (isMobileDevice) { getValue() }  // Mobile device cant do async so just update value in place  
+                if (isCipherBrowser()) { getValue() }  // Cipher browser cant do async  
                 $('#status').html("idle");
                 $('#last-transaction-status').html("last transaction was successful");
             }).catch(function(err) {
