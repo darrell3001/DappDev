@@ -16,53 +16,53 @@ contract Auction {
     event BidAccepted(address newMaxBidder, uint newMaxBid);
 
     modifier inState(AuctionState expectedState) {
-        require(currentAuctionState == expectedState);
+        require(currentAuctionState == expectedState, "auction in unexpected state");
         _;
     }
 
     modifier notInState(AuctionState expectedState) {
-        require(currentAuctionState != expectedState);
+        require(currentAuctionState != expectedState, "auction not in expected state");
         _;
     }
 
     modifier ownerOnly() {
-        require(msg.sender == auctionOwner);
+        require(msg.sender == auctionOwner, "only the auction owner may perform this task");
         _;
     }     
 
     modifier winningBidderOnly() {
-        require(msg.sender == winningBidder);
+        require(msg.sender == winningBidder, "only the winning bidder may perform this task");
         _;
     }     
 
     modifier notOwner() {
-        require(msg.sender != auctionOwner);
+        require(msg.sender != auctionOwner, "the auction owner may not perform this operation");
         _;
     }     
 
     modifier maxBidNotZero() {
-        require(maxBid != 0);
+        require(maxBid != 0, "the bid may not be zero");
         _;
     }     
 
     modifier bidGreaterThanMaxBid() {
-        require(msg.value > maxBid);
+        require(msg.value > maxBid, "bid must be greater than the max bid");
         _;
     }     
 
     modifier auctionTimeRemaining() {
-        require(now < auctionEndTime);
+        require(now < auctionEndTime, "auction has not ended");
         _;
     }
 
     modifier auctionTimeExpired() {
-        require(now >= auctionEndTime);
+        require(now >= auctionEndTime, "auction has ended");
         _;
     }
 
     modifier auctionCanBeEnded() {
         if (maxBidder != address(0)) {
-            require(now >= auctionEndTime);
+            require(now >= auctionEndTime, "auction is still active");
         }
         _;
     }

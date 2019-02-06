@@ -19,6 +19,7 @@
         <p id='timerpop'>0</p> 
         <p id='asyncpop'>0</p> 
         <p id='refreshtype'></p> 
+        <p id='version'>1.2.3</p> 
     </div>
 
     <link rel="stylesheet" type="text/css" href="/style/main.css">
@@ -41,69 +42,115 @@
         function initContract() {
             web3 = new Web3(web3.currentProvider); 
 
-            var address = '0x44f0d7d69aadcb38ca1de6dea02faf080119fa5e';
+            var address = '0xf945a15637f6008ecd7b63a5443379e65cb113a9';
             var abi = [
-                        {
-                            "constant": false,
-                            "inputs": [],
-                            "name": "decrement",
-                            "outputs": [],
-                            "payable": false,
-                            "stateMutability": "nonpayable",
-                            "type": "function"
-                        },
-                        {
-                            "constant": false,
-                            "inputs": [],
-                            "name": "increment",
-                            "outputs": [],
-                            "payable": false,
-                            "stateMutability": "nonpayable",
-                            "type": "function"
-                        },
-                        {
-                            "constant": false,
-                            "inputs": [],
-                            "name": "reset",
-                            "outputs": [],
-                            "payable": false,
-                            "stateMutability": "nonpayable",
-                            "type": "function"
-                        },
-                        {
-                            "inputs": [],
-                            "payable": false,
-                            "stateMutability": "nonpayable",
-                            "type": "constructor"
-                        },
-                        {
-                            "anonymous": false,
-                            "inputs": [
-                                {
-                                    "indexed": false,
-                                    "name": "newCounterValue",
-                                    "type": "int256"
-                                }
-                            ],
-                            "name": "counterUpdated",
-                            "type": "event"
-                        },
-                        {
-                            "constant": true,
-                            "inputs": [],
-                            "name": "getCounter",
-                            "outputs": [
-                                {
-                                    "name": "",
-                                    "type": "int256"
-                                }
-                            ],
-                            "payable": false,
-                            "stateMutability": "view",
-                            "type": "function"
-                        }
-                    ];
-
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "decrement",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "increment",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "reset",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"name": "_lockDurationMinutes",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "newCounterValue",
+				"type": "int256"
+			}
+		],
+		"name": "counterUpdated",
+		"type": "event"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getCounter",
+		"outputs": [
+			{
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getTimeNow",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "lockDurationMinutes",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "lockedUntilTime",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
             contract = new web3.eth.Contract(abi, address);
         }
 
@@ -120,8 +167,7 @@
 
         function isCipherBrowser() {
             // case insensitive for regex
-//            return (/Cipher/i.test(navigator.userAgent)); 
-              return(false)
+            return (/Cipher/i.test(navigator.userAgent)); 
         }
 
         function timerPop() {
